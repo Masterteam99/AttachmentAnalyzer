@@ -8,6 +8,9 @@ import {
   wearableIntegrations,
   healthData,
   movementAnalysis,
+  exerciseTemplates,
+  biomechanicalRules,
+  correctiveFeedback,
   type User,
   type UpsertUser,
   type WorkoutPlan,
@@ -23,6 +26,12 @@ import {
   type HealthData,
   type MovementAnalysis,
   type InsertMovementAnalysis,
+  type ExerciseTemplate,
+  type InsertExerciseTemplate,
+  type BiomechanicalRule,
+  type InsertBiomechanicalRule,
+  type CorrectiveFeedback,
+  type InsertCorrectiveFeedback,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, gte, sql } from "drizzle-orm";
@@ -349,6 +358,44 @@ export class DatabaseStorage implements IStorage {
   async createMovementAnalysis(analysis: InsertMovementAnalysis): Promise<MovementAnalysis> {
     const [newAnalysis] = await db.insert(movementAnalysis).values(analysis).returning();
     return newAnalysis;
+  }
+
+  // Exercise template operations
+  async getAllExerciseTemplates(): Promise<ExerciseTemplate[]> {
+    return await db.select().from(exerciseTemplates);
+  }
+
+  async createExerciseTemplate(template: InsertExerciseTemplate): Promise<ExerciseTemplate> {
+    const [newTemplate] = await db.insert(exerciseTemplates).values(template).returning();
+    return newTemplate;
+  }
+
+  async updateExerciseTemplate(id: number, updates: Partial<InsertExerciseTemplate>): Promise<ExerciseTemplate> {
+    const [updated] = await db.update(exerciseTemplates)
+      .set(updates)
+      .where(eq(exerciseTemplates.id, id))
+      .returning();
+    return updated;
+  }
+
+  async getBiomechanicalRules(templateId: number): Promise<BiomechanicalRule[]> {
+    return await db.select().from(biomechanicalRules)
+      .where(eq(biomechanicalRules.exerciseTemplateId, templateId));
+  }
+
+  async createBiomechanicalRule(rule: InsertBiomechanicalRule): Promise<BiomechanicalRule> {
+    const [newRule] = await db.insert(biomechanicalRules).values(rule).returning();
+    return newRule;
+  }
+
+  async getCorrectiveFeedback(templateId: number): Promise<CorrectiveFeedback[]> {
+    return await db.select().from(correctiveFeedback)
+      .where(eq(correctiveFeedback.exerciseTemplateId, templateId));
+  }
+
+  async createCorrectiveFeedback(feedback: InsertCorrectiveFeedback): Promise<CorrectiveFeedback> {
+    const [newFeedback] = await db.insert(correctiveFeedback).values(feedback).returning();
+    return newFeedback;
   }
 
   async getUserMovementAnalysis(userId: string, limit = 20): Promise<MovementAnalysis[]> {

@@ -70,6 +70,77 @@ export const exercises = pgTable("exercises", {
   weight: real("weight"),
 });
 
+// Exercise templates with reference videos and biomechanical rules
+export const exerciseTemplates = pgTable("exercise_templates", {
+  id: serial("id").primaryKey(),
+  name: varchar("name").notNull(),
+  category: varchar("category").notNull(), // squat, pushup, lunge, etc
+  description: text("description"),
+  referenceVideoUrl: varchar("reference_video_url"), // URL to professional execution video
+  referenceVideoKeypoints: jsonb("reference_video_keypoints"), // Stored MediaPipe keypoints
+  difficulty: integer("difficulty").default(1),
+  targetMuscles: text("target_muscles").array(),
+  equipment: text("equipment").array(),
+  instructions: text("instructions").array(),
+  commonMistakes: text("common_mistakes").array(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Biomechanical rules for each exercise
+export const biomechanicalRules = pgTable("biomechanical_rules", {
+  id: serial("id").primaryKey(),
+  exerciseTemplateId: integer("exercise_template_id").notNull().references(() => exerciseTemplates.id),
+  ruleName: varchar("rule_name").notNull(),
+  description: text("description"),
+  ruleType: varchar("rule_type").notNull(), // angle, distance, ratio, sequence
+  bodyParts: text("body_parts").array(), // which keypoints to check
+  minValue: real("min_value"),
+  maxValue: real("max_value"),
+  severity: varchar("severity").default("medium"), // low, medium, high, critical
+  correctionFeedback: text("correction_feedback"),
+  isActive: boolean("is_active").default(true),
+});
+
+// Corrective feedback templates
+export const correctiveFeedback = pgTable("corrective_feedback", {
+  id: serial("id").primaryKey(),
+  exerciseTemplateId: integer("exercise_template_id").notNull().references(() => exerciseTemplates.id),
+  violatedRule: varchar("violated_rule"),
+  feedbackType: varchar("feedback_type").notNull(), // form, breathing, tempo, range_of_motion
+  message: text("message").notNull(),
+  priority: integer("priority").default(1), // 1-5, higher = more important
+  videoExample: varchar("video_example"), // URL to corrective demonstration
+  isActive: boolean("is_active").default(true),
+});
+
+// Relations for new tables
+export const exerciseTemplatesRelations = relations(exerciseTemplates, ({ many }) => ({
+  biomechanicalRules: many(biomechanicalRules),
+  correctiveFeedback: many(correctiveFeedback),
+}));
+
+export const biomechanicalRulesRelations = relations(biomechanicalRules, ({ one }) => ({
+  exerciseTemplate: one(exerciseTemplates, {
+    fields: [biomechanicalRules.exerciseTemplateId],
+    references: [exerciseTemplates.id],
+  }),
+}));
+
+export const correctiveFeedbackRelations = relations(correctiveFeedback, ({ one }) => ({
+  exerciseTemplate: one(exerciseTemplates, {
+    fields: [correctiveFeedback.exerciseTemplateId],
+    references: [exerciseTemplates.id],
+  }),
+}));
+
+// Type exports for new tables
+export type ExerciseTemplate = typeof exerciseTemplates.$inferSelect;
+export type InsertExerciseTemplate = typeof exerciseTemplates.$inferInsert;
+export type BiomechanicalRule = typeof biomechanicalRules.$inferSelect;
+export type InsertBiomechanicalRule = typeof biomechanicalRules.$inferInsert;
+export type CorrectiveFeedback = typeof correctiveFeedback.$inferSelect;
+export type InsertCorrectiveFeedback = typeof correctiveFeedback.$inferInsert;
+
 export const workoutSessions = pgTable("workout_sessions", {
   id: serial("id").primaryKey(),
   userId: varchar("user_id").notNull().references(() => users.id),

@@ -9,6 +9,7 @@ import { gamificationService } from "./services/gamificationService";
 import { wearableService } from "./services/wearableService";
 import { z } from "zod";
 import { insertWorkoutPlanSchema, insertWorkoutSessionSchema, insertMovementAnalysisSchema } from "@shared/schema";
+import contentManagementRoutes from "./contentManagement";
 
 // Initialize Stripe if key is available
 let stripe: Stripe | null = null;
@@ -350,6 +351,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to delete user account" });
     }
   });
+
+  // Content management routes
+  app.use('/api/content', contentManagementRoutes);
 
   const httpServer = createServer(app);
   return httpServer;

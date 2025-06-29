@@ -1,0 +1,169 @@
+{
+  "exerciseData": [
+    {
+      "name": "Squat",
+      "category": "squat",
+      "description": "Esercizio fondamentale per quadricipiti, glutei e core",
+      "referenceVideoUrl": "https://example.com/videos/perfect-squat.mp4",
+      "referenceVideoKeypoints": {
+        "frames": [
+          {
+            "timestamp": 0.0,
+            "keypoints": [
+              {"part": "nose", "x": 320, "y": 200, "confidence": 0.95},
+              {"part": "left_knee", "x": 280, "y": 400, "confidence": 0.92},
+              {"part": "right_knee", "x": 360, "y": 400, "confidence": 0.92},
+              {"part": "left_ankle", "x": 280, "y": 500, "confidence": 0.90},
+              {"part": "right_ankle", "x": 360, "y": 500, "confidence": 0.90}
+            ]
+          }
+        ]
+      },
+      "difficulty": 2,
+      "targetMuscles": ["quadriceps", "gluteus", "hamstrings", "calves"],
+      "equipment": ["bodyweight"],
+      "instructions": [
+        "Posiziona i piedi alla larghezza delle spalle",
+        "Mantieni la schiena dritta e il core attivo",
+        "Scendi lentamente piegando ginocchia e anche",
+        "Scendi fino a quando le cosce sono parallele al suolo",
+        "Risali spingendo attraverso i talloni"
+      ],
+      "commonMistakes": [
+        "Ginocchia che cedono verso l'interno",
+        "Busto troppo inclinato in avanti",
+        "Non scendere abbastanza in profondità",
+        "Peso sulle punte dei piedi invece che sui talloni"
+      ],
+      "biomechanicalRules": [
+        {
+          "ruleName": "Knee Alignment",
+          "description": "Le ginocchia devono rimanere allineate con le punte dei piedi",
+          "ruleType": "angle",
+          "bodyParts": ["left_knee", "right_knee", "left_ankle", "right_ankle"],
+          "minValue": -15,
+          "maxValue": 15,
+          "severity": "high",
+          "correctionFeedback": "Mantieni le ginocchia allineate con le punte dei piedi, evita che cedano verso l'interno"
+        },
+        {
+          "ruleName": "Hip Depth",
+          "description": "Le anche devono scendere sotto il livello delle ginocchia",
+          "ruleType": "distance",
+          "bodyParts": ["left_hip", "right_hip", "left_knee", "right_knee"],
+          "minValue": 50,
+          "maxValue": 200,
+          "severity": "medium",
+          "correctionFeedback": "Scendi più in profondità, le anche devono andare sotto il livello delle ginocchia"
+        },
+        {
+          "ruleName": "Back Angle",
+          "description": "La schiena deve rimanere relativamente dritta",
+          "ruleType": "angle",
+          "bodyParts": ["head", "shoulders", "hips"],
+          "minValue": 15,
+          "maxValue": 45,
+          "severity": "high",
+          "correctionFeedback": "Mantieni il busto più eretto, evita di inclinarti troppo in avanti"
+        }
+      ],
+      "correctiveFeedback": [
+        {
+          "violatedRule": "Knee Alignment",
+          "feedbackType": "form",
+          "message": "Le tue ginocchia stanno cedendo verso l'interno. Concentrati nel spingere le ginocchia verso l'esterno, allineandole con le punte dei piedi.",
+          "priority": 5,
+          "videoExample": "https://example.com/corrections/knee-alignment.mp4"
+        },
+        {
+          "violatedRule": "Hip Depth",
+          "feedbackType": "range_of_motion",
+          "message": "Non stai scendendo abbastanza in profondità. Cerca di portare le anche sotto il livello delle ginocchia per massimizzare l'attivazione muscolare.",
+          "priority": 3,
+          "videoExample": "https://example.com/corrections/squat-depth.mp4"
+        },
+        {
+          "violatedRule": "Back Angle",
+          "feedbackType": "form",
+          "message": "Stai inclinando troppo il busto in avanti. Mantieni il petto alto e la schiena dritta durante tutto il movimento.",
+          "priority": 4,
+          "videoExample": "https://example.com/corrections/back-posture.mp4"
+        }
+      ]
+    },
+    {
+      "name": "Push-up",
+      "category": "pushup",
+      "description": "Esercizio per pettorali, tricipiti e core",
+      "referenceVideoUrl": "https://example.com/videos/perfect-pushup.mp4",
+      "referenceVideoKeypoints": {
+        "frames": [
+          {
+            "timestamp": 0.0,
+            "keypoints": [
+              {"part": "nose", "x": 320, "y": 150, "confidence": 0.95},
+              {"part": "left_wrist", "x": 250, "y": 180, "confidence": 0.92},
+              {"part": "right_wrist", "x": 390, "y": 180, "confidence": 0.92},
+              {"part": "left_shoulder", "x": 280, "y": 160, "confidence": 0.90},
+              {"part": "right_shoulder", "x": 360, "y": 160, "confidence": 0.90}
+            ]
+          }
+        ]
+      },
+      "difficulty": 2,
+      "targetMuscles": ["pectorals", "triceps", "deltoids", "core"],
+      "equipment": ["bodyweight"],
+      "instructions": [
+        "Posizionati in plank con le mani sotto le spalle",
+        "Mantieni il corpo in linea retta dalla testa ai talloni",
+        "Scendi lentamente fino a toccare il petto a terra",
+        "Spingi verso l'alto mantenendo la forma",
+        "Mantieni i gomiti vicini al corpo"
+      ],
+      "commonMistakes": [
+        "Fianchi troppo alti o troppo bassi",
+        "Gomiti troppo larghi",
+        "Range di movimento incompleto",
+        "Perdita dell'allineamento del corpo"
+      ],
+      "biomechanicalRules": [
+        {
+          "ruleName": "Body Alignment",
+          "description": "Il corpo deve rimanere in linea retta",
+          "ruleType": "angle",
+          "bodyParts": ["head", "shoulders", "hips", "ankles"],
+          "minValue": -10,
+          "maxValue": 10,
+          "severity": "high",
+          "correctionFeedback": "Mantieni il corpo in linea retta, evita di alzare o abbassare i fianchi"
+        },
+        {
+          "ruleName": "Elbow Position",
+          "description": "I gomiti devono rimanere vicini al corpo",
+          "ruleType": "angle",
+          "bodyParts": ["left_elbow", "right_elbow", "shoulders"],
+          "minValue": 20,
+          "maxValue": 45,
+          "severity": "medium",
+          "correctionFeedback": "Mantieni i gomiti più vicini al corpo, evita di allargarli troppo"
+        }
+      ],
+      "correctiveFeedback": [
+        {
+          "violatedRule": "Body Alignment",
+          "feedbackType": "form",
+          "message": "Il tuo corpo non è allineato. Immagina una linea retta dalla testa ai talloni e mantieni questa posizione.",
+          "priority": 5,
+          "videoExample": "https://example.com/corrections/pushup-alignment.mp4"
+        },
+        {
+          "violatedRule": "Elbow Position",
+          "feedbackType": "form",
+          "message": "I tuoi gomiti sono troppo larghi. Mantienili più vicini al corpo per una forma corretta e maggiore attivazione muscolare.",
+          "priority": 3,
+          "videoExample": "https://example.com/corrections/elbow-position.mp4"
+        }
+      ]
+    }
+  ]
+}
