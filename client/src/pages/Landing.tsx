@@ -161,7 +161,7 @@ export default function Landing() {
             </div>
           </div>
           <div className="mt-8 text-center text-gray-400">
-            <p>&copy; 2024 FitTracker Pro. All rights reserved.</p>
+            <p>© 2025 Motion Insight. All rights reserved.</p>
           </div>
         </div>
       </footer>
