@@ -157,7 +157,7 @@ export default function Landing() {
               <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
                 <Activity className="h-5 w-5 text-white" />
               </div>
-              <span className="ml-3 text-xl font-bold">FitTracker Pro</span>
+              <span className="ml-3 text-xl font-bold">Motion Insight</span>
             </div>
           </div>
           <div className="mt-8 text-center text-gray-400">
