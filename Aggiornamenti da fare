@@ -1,0 +1,224 @@
+2. Aggiornamento funzioni di valutazione esercizio
+Dove:
+backend/services/fitness_analyzer/movement_analysis.py
+
+Cosa fare:
+Aggiungi o sostituisci le seguenti funzioni:
+
+
+
+
+import pandas as pd
+import openai
+
+def carica_regole_e_suggerimenti(nome_esercizio: str):
+    df = pd.read_excel('regole_biomeccaniche.xlsx')
+    regole = df[df['esercizio'] == nome_esercizio]
+    return regole.to_dict('records')
+
+def verifica_regole_biomeccaniche(keypoints: dict, regole: list):
+    feedbacks = []
+    errori = 0
+    for regola in regole:
+        valore = keypoints.get(regola['articolazione'], 0)
+        if regola['condizione'] == '>' and valore > regola['limite']:
+            feedbacks.append({
+                "errore": regola['errore'],
+                "descrizione": regola['descrizione_errore'],
+                "suggerimento": regola['suggerimento']
+            })
+            errori += 1
+        elif regola['condizione'] == '<' and valore < regola['limite']:
+            feedbacks.append({
+                "errore": regola['errore'],
+                "descrizione": regola['descrizione_errore'],
+                "suggerimento": regola['suggerimento']
+            })
+            errori += 1
+    score = 1.0 if errori == 0 else max(0, 1 - errori / max(1, len(regole)))
+    return feedbacks, score
+
+def valutazione_openai(keypoints, nome_esercizio):
+    prompt = f"Valuta la correttezza dell'esecuzione dell'esercizio '{nome_esercizio}' dati questi keypoints: {keypoints}. Restituisci un punteggio da 0 a 1 e un breve feedback."
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": prompt}]
+    )
+    testo = response.choices[0].message['content']
+    try:
+        score = float(testo.split("Punteggio:")[1].split(".")[0])
+    except Exception:
+        score = 0.5
+    feedback = testo
+    return feedback, score
+
+def carica_keypoints_pt(nome_esercizio):
+    # Carica i keypoints medi del PT da file/database
+    return {}
+
+def confronto_con_pt(keypoints_utente, keypoints_pt):
+    if not keypoints_pt:
+        return "Nessun riferimento PT disponibile.", 0.5
+    differenze = [abs(keypoints_utente[k] - keypoints_pt.get(k, 0)) for k in keypoints_utente]
+    media_diff = sum(differenze) / len(differenze)
+    if media_diff < 10:
+        return "Ottima corrispondenza con il PT.", 1.0
+    elif media_diff < 20:
+        return "Buona, ma puoi migliorare la precisione.", 0.7
+    else:
+        return "Differenza significativa rispetto al PT.", 0.4
+
+def calcola_feedback_finale(score_ai, score_bio, score_pt):
+    return round(score_ai * 0.33 + score_bio * 0.34 + score_pt * 0.33, 2)
+
+
+
+
+
+
+
+3. Aggiornamento endpoint API per analisi esercizio
+Dove:
+backend/api/routes/movement.py
+
+Cosa fare:
+Aggiorna la funzione /analizza_frame/ come segue: 
+
+
+
+from fastapi import APIRouter, Body
+from backend.services.fitness_analyzer.movement_analysis import (
+    carica_regole_e_suggerimenti, verifica_regole_biomeccaniche,
+    valutazione_openai, carica_keypoints_pt, confronto_con_pt, calcola_feedback_finale
+)
+
+router = APIRouter()
+
+@router.post("/analizza_frame/")
+async def analizza_frame(
+    nome_esercizio: str = Body(...),
+    keypoints: dict = Body(...)
+):
+    regole = carica_regole_e_suggerimenti(nome_esercizio)
+    feedbacks_bio, score_bio = verifica_regole_biomeccaniche(keypoints, regole)
+    feedback_ai, score_ai = valutazione_openai(keypoints, nome_esercizio)
+    keypoints_pt = carica_keypoints_pt(nome_esercizio)
+    feedback_pt, score_pt = confronto_con_pt(keypoints, keypoints_pt)
+    score_finale = calcola_feedback_finale(score_ai, score_bio, score_pt)
+    return {
+        "score_finale": score_finale,
+        "feedback_ai": feedback_ai,
+        "feedback_bio": feedbacks_bio,
+        "feedback_pt": feedback_pt
+    }
+
+
+
+
+
+
+
+4. Percentuale di correttezza workout
+Dove:
+
+Funzione: backend/services/fitness_analyzer/workout_evaluation.py
+Endpoint: backend/api/routes/workout_evaluation.py
+Cosa fare:
+Aggiungi la funzione:
+
+def calcola_percentuale_workout(risultati_esercizi):
+    if not risultati_esercizi:
+        return 0
+    percentuale = sum(risultati_esercizi) / len(risultati_esercizi) * 100
+    return round(percentuale, 1)
+
+E l’endpoint:
+
+from fastapi import APIRouter, Body
+from backend.services.fitness_analyzer.workout_evaluation import calcola_percentuale_workout
+
+router = APIRouter()
+
+@router.post("/valuta_workout/")
+async def valuta_workout(
+    risultati_esercizi: list = Body(...)
+):
+    percentuale = calcola_percentuale_workout(risultati_esercizi)
+    return {"percentuale_correttezza": percentuale}
+
+
+
+
+5. Aggiornamento frontend
+Dove:
+
+Servizio: frontend/src/services/workoutEvaluationService.js
+Componente: frontend/src/components/WorkoutSummary.vue
+Cosa fare:
+Aggiungi il servizio:
+
+
+
+import axios from 'axios'
+
+export async function inviaRisultatiWorkout(risultatiEsercizi) {
+  const response = await axios.post('/api/valuta_workout/', {
+    risultati_esercizi: risultatiEsercizi
+  })
+  return response.data.percentuale_correttezza
+}
+
+E il componente:
+
+<template>
+  <div>
+    <h2>Riepilogo Workout</h2>
+    <p v-if="percentuale !== null">
+      Percentuale di correttezza: <strong>{{ percentuale }}%</strong>
+    </p>
+    <button @click="valutaWorkout">Calcola percentuale</button>
+  </div>
+</template>
+
+<script>
+import { inviaRisultatiWorkout } from '@/services/workoutEvaluationService'
+
+export default {
+  props: {
+    risultatiEsercizi: {
+      type: Array,
+      required: true
+    }
+  },
+  data() {
+    return {
+      percentuale: null
+    }
+  },
+  methods: {
+    async valutaWorkout() {
+      this.percentuale = await inviaRisultatiWorkout(this.risultatiEsercizi)
+    }
+  }
+}
+</script>
+
+
+
+
+6. Struttura cartelle e file
+
+
+backend/
+├── assets/
+│   ├── video_pt/
+│   └── keypoints_pt/
+├── regole_biomeccaniche.xlsx
+├── services/
+│   └── fitness_analyzer/
+│       ├── movement_analysis.py
+│       └── workout_evaluation.py
+├── api/
+│   └── routes/
+│       ├── movement.py
+│       └── workout_evaluation.py
