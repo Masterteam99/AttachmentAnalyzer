@@ -15,11 +15,21 @@ import contentManagementRoutes from "./contentManagement";
 let stripe: Stripe | null = null;
 if (process.env.STRIPE_SECRET_KEY) {
   stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: "2024-06-20",
+    apiVersion: "2025-05-28.basil",
   });
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Health check endpoint
+  app.get('/api/health', (req, res) => {
+    res.json({ 
+      status: 'OK', 
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV || 'development',
+      database: process.env.DATABASE_URL ? 'connected' : 'not configured'
+    });
+  });
+
   // Auth middleware
   await setupAuth(app);
 
