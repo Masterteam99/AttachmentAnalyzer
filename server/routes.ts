@@ -20,6 +20,8 @@ if (process.env.STRIPE_SECRET_KEY) {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  const httpServer = createServer(app);
+  
   // Health check endpoint
   app.get('/api/health', (req, res) => {
     res.json({ 
@@ -547,4 +549,5 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Exercise routes
+  return httpServer;
+}

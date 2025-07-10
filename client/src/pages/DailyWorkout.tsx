@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, Play, CheckCircle, SkipForward, Trophy, Calendar } from "lucide-react";
-import { DailyWorkoutDashboard } from "@/components/DailyWorkoutDashboard";
-import { ExerciseTimer } from "@/components/ExerciseTimer";
+import DailyWorkoutDashboard from "@/components/DailyWorkoutDashboard";
+import ExerciseTimer from "@/components/ExerciseTimer";
 import NavigationSidebar from "@/components/NavigationSidebar";
 import { useQuery } from "@tanstack/react-query";
 

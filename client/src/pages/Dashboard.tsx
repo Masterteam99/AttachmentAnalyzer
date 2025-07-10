@@ -33,7 +33,12 @@ export default function Dashboard() {
     }
   }, [isAuthenticated, isLoading, toast]);
 
-  const { data: dashboardData, isLoading: isDashboardLoading, error } = useQuery({
+  const { data: dashboardData, isLoading: isDashboardLoading, error } = useQuery<{
+    stats: any;
+    recentSessions: any[];
+    recentAchievements: any[];
+    recentHealthData: any[];
+  }>({
     queryKey: ["/api/dashboard/stats"],
     enabled: isAuthenticated,
     retry: false,
