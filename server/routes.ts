@@ -138,12 +138,57 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Video PT reference routes
+  app.get('/api/exercise-video/:exerciseName', isAuthenticated, async (req: any, res) => {
+    try {
+      const exerciseName = req.params.exerciseName;
+      const { videoReferenceService } = await import('./services/videoReferenceService');
+      
+      const videoRef = await videoReferenceService.getVideoReference(exerciseName);
+      if (!videoRef) {
+        return res.status(404).json({ message: "Video reference not found" });
+      }
+      
+      res.json(videoRef);
+    } catch (error) {
+      console.error("Error fetching exercise video:", error);
+      res.status(500).json({ message: "Failed to fetch exercise video" });
+    }
+  });
+
+  app.get('/api/biomechanical-rules/:exerciseName', isAuthenticated, async (req: any, res) => {
+    try {
+      const exerciseName = req.params.exerciseName;
+      const { biomechanicalRulesEngine } = await import('./services/biomechanicalRulesEngine');
+      
+      const rules = biomechanicalRulesEngine.getRulesForExercise(exerciseName);
+      res.json(rules);
+    } catch (error) {
+      console.error("Error fetching biomechanical rules:", error);
+      res.status(500).json({ message: "Failed to fetch biomechanical rules" });
+    }
+  });
+
+  app.get('/api/exercises', isAuthenticated, async (req: any, res) => {
+    try {
+      const { videoReferenceService } = await import('./services/videoReferenceService');
+      const exercises = await videoReferenceService.getAllExerciseVideos();
+      res.json(exercises);
+    } catch (error) {
+      console.error("Error fetching exercises:", error);
+      res.status(500).json({ message: "Failed to fetch exercises" });
+    }
+  });
+
   // Movement analysis routes
   app.post('/api/movement-analysis', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
       const { exerciseName, videoData, sessionId } = req.body;
       
+      console.log(`Starting triple analysis for exercise: ${exerciseName}`);
+      
+      // Perform triple analysis (GPT + PT Comparison + Biomechanical Rules)
       const analysis = await movementAnalysisService.analyzeMovement(exerciseName, videoData);
       
       const analysisData = insertMovementAnalysisSchema.parse({
@@ -157,7 +202,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       const savedAnalysis = await storage.createMovementAnalysis(analysisData);
-      res.json(savedAnalysis);
+      
+      console.log(`Triple analysis completed. Final score: ${analysis.formScore}`);
+      
+      res.json({
+        ...savedAnalysis,
+        analysisDetails: analysis.analysisDetails // Include detailed breakdown
+      });
     } catch (error) {
       console.error("Error analyzing movement:", error);
       res.status(500).json({ message: "Failed to analyze movement" });
@@ -365,6 +416,135 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Content management routes
   app.use('/api/content', contentManagementRoutes);
 
-  const httpServer = createServer(app);
-  return httpServer;
-}
+  // Daily Workout routes
+  app.get('/api/daily-workout', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const date = req.query.date || new Date().toISOString().split('T')[0];
+      
+      const { DailyWorkoutService } = await import('./services/dailyWorkoutService');
+      const dailyWorkoutService = new DailyWorkoutService(storage);
+      
+      let workout = await dailyWorkoutService.getDailyWorkout(userId, date);
+      
+      // Se non esiste, genera automaticamente
+      if (!workout) {
+        workout = await dailyWorkoutService.generateDailyWorkout(userId, date);
+      }
+      
+      res.json(workout);
+    } catch (error) {
+      console.error("Error fetching daily workout:", error);
+      res.status(500).json({ message: "Failed to fetch daily workout" });
+    }
+  });
+
+  app.post('/api/daily-workout/start-exercise', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { exerciseId, date } = req.body;
+      
+      const { DailyWorkoutService } = await import('./services/dailyWorkoutService');
+      const dailyWorkoutService = new DailyWorkoutService(storage);
+      
+      const result = await dailyWorkoutService.startExercise(userId, exerciseId, date);
+      
+      res.json(result);
+    } catch (error) {
+      console.error("Error starting exercise:", error);
+      res.status(500).json({ message: "Failed to start exercise" });
+    }
+  });
+
+  app.post('/api/daily-workout/complete-exercise', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { exerciseId, analysisResult, date } = req.body;
+      
+      const { DailyWorkoutService } = await import('./services/dailyWorkoutService');
+      const dailyWorkoutService = new DailyWorkoutService(storage);
+      
+      const result = await dailyWorkoutService.completeExercise(userId, exerciseId, analysisResult, date);
+      
+      res.json(result);
+    } catch (error) {
+      console.error("Error completing exercise:", error);
+      res.status(500).json({ message: "Failed to complete exercise" });
+    }
+  });
+
+  app.post('/api/daily-workout/skip-exercise', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { exerciseId, reason } = req.body;
+      
+      const { DailyWorkoutService } = await import('./services/dailyWorkoutService');
+      const dailyWorkoutService = new DailyWorkoutService(storage);
+      
+      const workout = await dailyWorkoutService.skipExercise(userId, exerciseId, reason);
+      
+      res.json(workout);
+    } catch (error) {
+      console.error("Error skipping exercise:", error);
+      res.status(500).json({ message: "Failed to skip exercise" });
+    }
+  });
+
+  app.get('/api/workout-stats', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const days = parseInt(req.query.days) || 7;
+      
+      const { DailyWorkoutService } = await import('./services/dailyWorkoutService');
+      const dailyWorkoutService = new DailyWorkoutService(storage);
+      
+      const stats = await dailyWorkoutService.getWorkoutStats(userId, days);
+      
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching workout stats:", error);
+      res.status(500).json({ message: "Failed to fetch workout stats" });
+    }
+  });
+
+  // Exercise Timer routes
+  app.post('/api/exercise-timer/start', isAuthenticated, async (req: any, res) => {
+    try {
+      const { exerciseName } = req.body;
+      
+      const { exerciseTimerService } = await import('./services/exerciseTimerService');
+      
+      const result = await exerciseTimerService.startExerciseSequence(exerciseName);
+      
+      res.json(result);
+    } catch (error) {
+      console.error("Error starting exercise timer:", error);
+      res.status(500).json({ message: "Failed to start exercise timer" });
+    }
+  });
+
+  app.get('/api/exercise-timer/config', isAuthenticated, async (req: any, res) => {
+    try {
+      const { exerciseTimerService } = await import('./services/exerciseTimerService');
+      const config = exerciseTimerService.getConfig();
+      
+      res.json(config);
+    } catch (error) {
+      console.error("Error fetching timer config:", error);
+      res.status(500).json({ message: "Failed to fetch timer config" });
+    }
+  });
+
+  app.post('/api/exercise-timer/complete', isAuthenticated, async (req: any, res) => {
+    try {
+      const { exerciseTimerService } = await import('./services/exerciseTimerService');
+      exerciseTimerService.completeProcessing();
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error completing timer:", error);
+      res.status(500).json({ message: "Failed to complete timer" });
+    }
+  });
+
+  // Exercise routes

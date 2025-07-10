@@ -1,0 +1,332 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { 
+  Play, 
+  Pause, 
+  SkipForward, 
+  Clock, 
+  CheckCircle, 
+  AlertCircle, 
+  Video, 
+  Camera, 
+  Eye,
+  Brain,
+  Activity,
+  BarChart3
+} from "lucide-react";
+
+interface Exercise {
+  id: string;
+  name: string;
+  description: string;
+  duration_seconds: number;
+  muscle_groups: string[];
+  difficulty: "easy" | "medium" | "hard";
+  calories_burn: number;
+  video_reference?: string;
+}
+
+interface AnalysisResult {
+  gpt_analysis: {
+    score: number;
+    feedback: string;
+    corrections: string[];
+  };
+  pt_comparison: {
+    score: number;
+    similarity_percentage: number;
+    key_differences: string[];
+  };
+  biomechanical_analysis: {
+    score: number;
+    violations: Array<{
+      rule: string;
+      severity: "low" | "medium" | "high";
+      description: string;
+    }>;
+  };
+  overall_score: number;
+  summary: string;
+  recommendations: string[];
+}
+
+interface TimerState {
+  phase: 'idle' | 'preparing' | 'recording' | 'processing' | 'completed' | 'error';
+  timeRemaining: number;
+  totalTime: number;
+  message: string;
+}
+
+interface ExerciseTimerProps {
+  exercise: Exercise;
+  onComplete: (analysisData: AnalysisResult) => void;
+  onSkip: () => void;
+  onCancel: () => void;
+}
+
+export function ExerciseTimer({ 
+  exercise, 
+  onComplete, 
+  onSkip, 
+  onCancel 
+}: ExerciseTimerProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
+  const [timerState, setTimerState] = useState<TimerState>({
+    phase: 'idle',
+    timeRemaining: 0,
+    totalTime: 0,
+    message: 'Pronto per iniziare'
+  });
+
+  const [isActive, setIsActive] = useState(false);
+  const [showVideoReference, setShowVideoReference] = useState(true);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+
+    if (isActive && timerState.phase !== 'completed' && timerState.phase !== 'error') {
+      interval = setInterval(() => {
+        updateTimer();
+      }, 1000);
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isActive, timerState.phase]);
+
+  const updateTimer = () => {
+    // Simula aggiornamento timer - in produzione sarebbe WebSocket
+    setTimerState(prev => {
+      if (prev.timeRemaining <= 0) {
+        handlePhaseComplete(prev.phase);
+        return prev;
+      }
+
+      return {
+        ...prev,
+        timeRemaining: prev.timeRemaining - 1
+      };
+    });
+  };
+
+  const handlePhaseComplete = async (phase: string) => {
+    switch (phase) {
+      case 'preparing':
+        setTimerState({
+          phase: 'recording',
+          timeRemaining: exercise.duration_seconds,
+          totalTime: exercise.duration_seconds,
+          message: 'Registrazione in corso...'
+        });
+        break;
+      case 'recording':
+        setTimerState({
+          phase: 'processing',
+          timeRemaining: 0,
+          totalTime: 0,
+          message: 'Analisi in corso...'
+        });
+        await performAnalysis();
+        break;
+      case 'processing':
+        setTimerState({
+          phase: 'completed',
+          timeRemaining: 0,
+          totalTime: 0,
+          message: 'Analisi completata!'
+        });
+        setIsActive(false);
+        break;
+    }
+  };
+
+  const performAnalysis = async () => {
+    try {
+      // Simula chiamata API per analisi tripla
+      const response = await fetch('/api/movement-analysis', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          exercise_id: exercise.id,
+          exercise_name: exercise.name,
+          duration: exercise.duration_seconds,
+          // In produzione: dati video/keypoints
+          video_data: "mock_video_data",
+        }),
+      });
+
+      if (!response.ok) throw new Error('Analisi fallita');
+
+      const result = await response.json();
+      setAnalysisResult(result);
+      
+      setTimerState(prev => ({
+        ...prev,
+        phase: 'completed',
+        message: 'Analisi completata!'
+      }));
+    } catch (error) {
+      console.error('Errore durante l\'analisi:', error);
+      setTimerState({
+        phase: 'error',
+        timeRemaining: 0,
+        totalTime: 0,
+        message: 'Errore durante l\'analisi'
+      });
+    }
+  };
+
+  const startTimer = () => {
+    setTimerState({
+      phase: 'preparing',
+      timeRemaining: 10,
+      totalTime: 10,
+      message: 'Preparati! Inizia tra 10 secondi...'
+    });
+    setIsActive(true);
+  };
+
+  const stopTimer = () => {
+    setIsActive(false);
+    setTimerState({
+      phase: 'idle',
+      timeRemaining: 0,
+      totalTime: 0,
+      message: 'Timer fermato'
+    });
+  };
+
+  const getProgressPercentage = () => {
+    if (timerState.totalTime === 0) return 0;
+    return ((timerState.totalTime - timerState.timeRemaining) / timerState.totalTime) * 100;
+  };
+
+  const getPhaseIcon = () => {
+    switch (timerState.phase) {
+      case 'preparing':
+        return <Clock className="h-6 w-6 text-orange-500" />;
+      case 'recording':
+        return <div className="h-6 w-6 bg-red-500 rounded-full animate-pulse" />;
+      case 'processing':
+        return <div className="h-6 w-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />;
+      case 'completed':
+        return <CheckCircle className="h-6 w-6 text-green-500" />;
+      case 'error':
+        return <AlertCircle className="h-6 w-6 text-red-500" />;
+      default:
+        return <Play className="h-6 w-6 text-gray-500" />;
+    }
+  };
+
+  const getPhaseColor = () => {
+    switch (timerState.phase) {
+      case 'preparing': return 'bg-orange-500';
+      case 'recording': return 'bg-red-500';
+      case 'processing': return 'bg-blue-500';
+      case 'completed': return 'bg-green-500';
+      case 'error': return 'bg-red-500';
+      default: return 'bg-gray-500';
+    }
+  };
+
+  return (
+    <Card className="w-full max-w-md mx-auto">
+      <CardHeader className="text-center">
+        <CardTitle className="flex items-center justify-center gap-2">
+          {getPhaseIcon()}
+          Esercizio: {exerciseName}
+        </CardTitle>
+        <CardDescription>
+          <Badge variant={timerState.phase === 'completed' ? 'default' : 'secondary'} className="mt-2">
+            {timerState.phase.toUpperCase()}
+          </Badge>
+        </CardDescription>
+      </CardHeader>
+      
+      <CardContent className="space-y-4">
+        {/* Progress Bar */}
+        <div className="space-y-2">
+          <div className="flex justify-between text-sm">
+            <span>Progresso</span>
+            <span>{Math.round(getProgressPercentage())}%</span>
+          </div>
+          <Progress 
+            value={getProgressPercentage()} 
+            className="h-3"
+          />
+        </div>
+
+        {/* Countdown */}
+        <div className="text-center">
+          <div className="text-3xl font-bold mb-2">
+            {timerState.timeRemaining > 0 
+              ? `${Math.floor(timerState.timeRemaining / 60)}:${(timerState.timeRemaining % 60).toString().padStart(2, '0')}`
+              : '00:00'
+            }
+          </div>
+          <p className="text-sm text-muted-foreground">
+            {timerState.message}
+          </p>
+        </div>
+
+        {/* Phase Indicator */}
+        <div className="flex justify-center space-x-2">
+          <div className={`h-3 w-8 rounded-full ${timerState.phase === 'preparing' || timerState.phase === 'recording' || timerState.phase === 'processing' || timerState.phase === 'completed' ? 'bg-orange-500' : 'bg-gray-300'}`} />
+          <div className={`h-3 w-8 rounded-full ${timerState.phase === 'recording' || timerState.phase === 'processing' || timerState.phase === 'completed' ? 'bg-red-500' : 'bg-gray-300'}`} />
+          <div className={`h-3 w-8 rounded-full ${timerState.phase === 'processing' || timerState.phase === 'completed' ? 'bg-blue-500' : 'bg-gray-300'}`} />
+          <div className={`h-3 w-8 rounded-full ${timerState.phase === 'completed' ? 'bg-green-500' : 'bg-gray-300'}`} />
+        </div>
+
+        {/* Controls */}
+        <div className="flex justify-center space-x-2 pt-4">
+          {timerState.phase === 'idle' && (
+            <Button onClick={startTimer} className="w-full">
+              <Play className="h-4 w-4 mr-2" />
+              Inizia Esercizio
+            </Button>
+          )}
+          
+          {isActive && timerState.phase !== 'completed' && (
+            <Button 
+              onClick={stopTimer} 
+              variant="outline"
+              className="flex-1"
+            >
+              <Pause className="h-4 w-4 mr-2" />
+              Ferma
+            </Button>
+          )}
+
+          {timerState.phase === 'completed' && (
+            <Button 
+              onClick={() => onTimerComplete()} 
+              className="w-full"
+              variant="default"
+            >
+              <CheckCircle className="h-4 w-4 mr-2" />
+              Continua
+            </Button>
+          )}
+        </div>
+
+        {/* Phase Labels */}
+        <div className="text-xs text-center text-muted-foreground space-y-1">
+          <div className="flex justify-between">
+            <span>Preparazione</span>
+            <span>Registrazione</span>
+            <span>Analisi</span>
+            <span>Completato</span>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}

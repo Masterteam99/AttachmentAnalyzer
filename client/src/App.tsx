@@ -11,6 +11,7 @@ import MovementAnalysis from "./pages/MovementAnalysis";
 import Achievements from "./pages/Achievements";
 import Wearables from "./pages/Wearables";
 import Subscription from "./pages/Subscription";
+import DailyWorkout from "./pages/DailyWorkout";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -23,6 +24,7 @@ function Router() {
       ) : (
         <>
           <Route path="/" component={Dashboard} />
+          <Route path="/daily-workout" component={DailyWorkout} />
           <Route path="/workout-plans" component={WorkoutPlans} />
           <Route path="/movement-analysis" component={MovementAnalysis} />
           <Route path="/achievements" component={Achievements} />

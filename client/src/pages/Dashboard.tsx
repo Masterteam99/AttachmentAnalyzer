@@ -122,6 +122,57 @@ export default function Dashboard() {
             {/* Stats Cards */}
             <DashboardStats data={dashboardData?.stats} />
 
+            {/* Quick Actions */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+              <Link href="/daily-workout">
+                <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 border-transparent hover:border-primary-200">
+                  <CardContent className="p-6">
+                    <div className="flex items-center">
+                      <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
+                        <Play className="text-primary-600 h-6 w-6" />
+                      </div>
+                      <div className="ml-4">
+                        <h3 className="font-semibold text-gray-900">Allenamento Giornaliero</h3>
+                        <p className="text-sm text-gray-600">Inizia il tuo workout di oggi</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+              
+              <Link href="/movement-analysis">
+                <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 border-transparent hover:border-primary-200">
+                  <CardContent className="p-6">
+                    <div className="flex items-center">
+                      <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <Video className="text-blue-600 h-6 w-6" />
+                      </div>
+                      <div className="ml-4">
+                        <h3 className="font-semibold text-gray-900">Analisi Movimento</h3>
+                        <p className="text-sm text-gray-600">Analizza la tua tecnica con IA</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+              
+              <Link href="/achievements">
+                <Card className="cursor-pointer hover:shadow-lg transition-shadow border-2 border-transparent hover:border-primary-200">
+                  <CardContent className="p-6">
+                    <div className="flex items-center">
+                      <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                        <Brain className="text-yellow-600 h-6 w-6" />
+                      </div>
+                      <div className="ml-4">
+                        <h3 className="font-semibold text-gray-900">Risultati</h3>
+                        <p className="text-sm text-gray-600">Visualizza i tuoi progressi</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            </div>
+
             {/* Main Dashboard Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
               {/* Left Column - Progress & Activity */}

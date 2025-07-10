@@ -23,6 +23,7 @@ export default function NavigationSidebar() {
 
   const navigation = [
     { name: "Dashboard", href: "/", icon: ChartLine },
+    { name: "Daily Workout", href: "/daily-workout", icon: Activity },
     { name: "Workout Plans", href: "/workout-plans", icon: Dumbbell },
     { name: "Movement Analysis", href: "/movement-analysis", icon: Video },
     { name: "Achievements", href: "/achievements", icon: Trophy },

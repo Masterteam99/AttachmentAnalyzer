@@ -1,0 +1,8 @@
+# Placeholder per Excel - sostituire con file reale
+# Struttura Excel necessaria:
+# Colonne: esercizio, articolazione, condizione, limite, errore, descrizione_errore, suggerimento, severita
+
+# Esempio struttura:
+# squat,knee_angle,>,120,knee_valgus,Ginocchia che si avvicinano verso l'interno,Mantieni le ginocchia allineate con le punte dei piedi,high
+# squat,hip_angle,<,90,insufficient_depth,Profondità squat insufficiente,Scendi fino a portare i fianchi sotto il livello delle ginocchia,medium
+# pushup,elbow_angle,>,45,wide_elbows,Gomiti troppo larghi,Mantieni i gomiti vicini al corpo (circa 45 gradi),medium
