@@ -1,0 +1,38 @@
+# 📊 Directory per Keypoints PT
+
+Questa directory è destinata al caricamento di file keypoints di riferimento per Personal Trainer.
+
+## Struttura File
+- `{exercise_name}_keypoints.json` - Dati keypoints di riferimento per l'esercizio
+
+## Esempi
+```
+squat_keypoints.json
+pushup_keypoints.json
+lunge_keypoints.json
+```
+
+## Utilizzo
+I keypoints vengono caricati dal servizio `videoReferenceService.ts` per confronto durante l'analisi biomeccanica.
+
+## Formato Keypoints
+```json
+{
+  "exerciseName": "squat",
+  "keypoints": [
+    {
+      "frame": 0,
+      "landmarks": [
+        {"x": 0.5, "y": 0.3, "z": 0.1, "visibility": 0.9},
+        {"x": 0.4, "y": 0.4, "z": 0.2, "visibility": 0.8}
+      ]
+    }
+  ],
+  "metadata": {
+    "frameRate": 30,
+    "totalFrames": 300,
+    "duration": 10,
+    "captureDate": "2025-07-11T00:00:00Z"
+  }
+}
+```

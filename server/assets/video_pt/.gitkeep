@@ -1,0 +1,28 @@
+# 📁 Directory per Video PT
+
+Questa directory è destinata al caricamento di video di riferimento per Personal Trainer.
+
+## Struttura File
+- `{exercise_name}.mp4` - Video di riferimento per l'esercizio
+- `{exercise_name}_metadata.json` - Metadati del video (durata, istruzioni, etc.)
+
+## Esempi
+```
+squat.mp4
+squat_metadata.json
+pushup.mp4
+pushup_metadata.json
+```
+
+## Utilizzo
+I video vengono caricati dal servizio `videoReferenceService.ts` per confronto durante l'analisi del movimento.
+
+## Formato Metadati
+```json
+{
+  "duration": 10,
+  "instructions": ["Istruzione 1", "Istruzione 2"],
+  "tips": ["Tip 1", "Tip 2"],
+  "keypoints": []
+}
+```
