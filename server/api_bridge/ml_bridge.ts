@@ -1,9 +1,9 @@
-"""
-Node.js Bridge Client for ML Services
-
-This TypeScript client handles communication between the main Node.js app
-and the Python ML services via HTTP API calls.
-"""
+/**
+ * Node.js Bridge Client for ML Services
+ * 
+ * This TypeScript client handles communication between the main Node.js app
+ * and the Python ML services via HTTP API calls.
+ */
 
 interface MLAnalysisRequest {
   exercise_name: string;

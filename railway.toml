@@ -1,0 +1,10 @@
+version: "2"
+
+build:
+  command: npm install && npm run build:safe
+
+deploy:
+  command: npm start
+
+env:
+  NODE_ENV: production
