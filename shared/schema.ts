@@ -287,35 +287,60 @@ export const movementAnalysisRelations = relations(movementAnalysis, ({ one }) =
   }),
 }));
 
-// Insert schemas
-export const insertUserSchema = createInsertSchema(users).omit({
-  id: true as any,
-  createdAt: true as any,
-  updatedAt: true as any,
+// Insert schemas - Using direct schema creation for better compatibility
+export const insertUserSchema = z.object({
+  email: z.string().email().optional(),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  profileImageUrl: z.string().url().optional(),
+  settings: z.record(z.any()).optional(),
 });
 
-export const insertWorkoutPlanSchema = createInsertSchema(workoutPlans).omit({
-  id: true as any,
-  createdAt: true as any,
+export const insertWorkoutPlanSchema = z.object({
+  userId: z.string(),
+  name: z.string(),
+  description: z.string().optional(),
+  difficulty: z.enum(['beginner', 'intermediate', 'advanced']),
+  exercises: z.array(z.any()),
+  estimatedDuration: z.number(),
 });
 
-export const insertExerciseSchema = createInsertSchema(exercises).omit({
-  id: true as any,
+export const insertExerciseSchema = z.object({
+  name: z.string(),
+  description: z.string().optional(),
+  category: z.string(),
+  muscleGroups: z.array(z.string()),
+  equipment: z.array(z.string()).optional(),
+  instructions: z.array(z.string()).optional(),
 });
 
-export const insertWorkoutSessionSchema = createInsertSchema(workoutSessions).omit({
-  id: true as any,
-  completedAt: true as any,
+export const insertWorkoutSessionSchema = z.object({
+  userId: z.string(),
+  workoutPlanId: z.string().optional(),
+  exercises: z.array(z.any()),
+  duration: z.number(),
+  caloriesBurned: z.number().optional(),
+  notes: z.string().optional(),
 });
 
-export const insertAchievementSchema = createInsertSchema(achievements).omit({
-  id: true as any,
-  earnedAt: true as any,
+export const insertAchievementSchema = z.object({
+  userId: z.string(),
+  type: z.string(),
+  title: z.string(),
+  description: z.string(),
+  points: z.number(),
+  badgeUrl: z.string().optional(),
 });
 
-export const insertMovementAnalysisSchema = createInsertSchema(movementAnalysis).omit({
-  id: true as any,
-  createdAt: true as any,
+export const insertMovementAnalysisSchema = z.object({
+  userId: z.string(),
+  exerciseName: z.string(),
+  videoUrl: z.string().optional(),
+  keypoints: z.array(z.any()),
+  formScore: z.number(),
+  feedback: z.string(),
+  corrections: z.array(z.string()),
+  strengths: z.array(z.string()),
 });
 
 // Types
