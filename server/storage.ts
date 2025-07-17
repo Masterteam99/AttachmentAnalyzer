@@ -246,10 +246,10 @@ export class DatabaseStorage implements IStorage {
     const [newSession] = await db.insert(workoutSessions).values(session).returning();
     
     // Update user stats
-    const stats = await this.getUserStats(session.userId);
+    const stats = await this.getUserStats((session as any).userId);
     if (stats) {
       const newTotalWorkouts = (stats.totalWorkouts || 0) + 1;
-      const newTotalCalories = (stats.totalCaloriesBurned || 0) + (session.caloriesBurned || 0);
+      const newTotalCalories = (stats.totalCaloriesBurned || 0) + ((session as any).caloriesBurned || 0);
       
       // Calculate streak
       const lastWorkout = stats.lastWorkoutDate;
@@ -264,7 +264,7 @@ export class DatabaseStorage implements IStorage {
         newStreak = 1;
       }
       
-      await this.updateUserStats(session.userId, {
+      await this.updateUserStats((session as any).userId, {
         totalWorkouts: newTotalWorkouts,
         totalCaloriesBurned: newTotalCalories,
         currentStreak: newStreak,

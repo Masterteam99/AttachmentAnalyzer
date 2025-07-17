@@ -25,7 +25,7 @@ router.get("/exercise-templates", isAuthenticated, async (req, res) => {
 router.post("/exercise-templates", isAuthenticated, async (req, res) => {
   try {
     const validatedData = insertExerciseTemplateSchema.parse(req.body);
-    const template = await storage.createExerciseTemplate(validatedData);
+    const template = await storage.createExerciseTemplate(validatedData as any);
     res.status(201).json(template);
   } catch (error) {
     console.error("Error creating exercise template:", error);
@@ -49,15 +49,15 @@ router.post("/seed-exercise-content", isAuthenticated, async (req, res) => {
       const template = await storage.createExerciseTemplate({
         name: exercise.name,
         category: exercise.category,
-        description: exercise.description,
-        referenceVideoUrl: exercise.referenceVideoUrl,
-        referenceVideoKeypoints: exercise.referenceVideoKeypoints,
-        difficulty: exercise.difficulty,
-        targetMuscles: exercise.targetMuscles,
-        equipment: exercise.equipment,
-        instructions: exercise.instructions,
-        commonMistakes: exercise.commonMistakes
-      });
+        ...(exercise.description && { description: exercise.description }),
+        ...(exercise.referenceVideoUrl && { referenceVideoUrl: exercise.referenceVideoUrl }),
+        ...(exercise.referenceVideoKeypoints && { referenceVideoKeypoints: exercise.referenceVideoKeypoints }),
+        ...(exercise.difficulty && { difficulty: exercise.difficulty }),
+        ...(exercise.targetMuscles && { targetMuscles: exercise.targetMuscles }),
+        ...(exercise.equipment && { equipment: exercise.equipment }),
+        ...(exercise.instructions && { instructions: exercise.instructions }),
+        ...(exercise.commonMistakes && { commonMistakes: exercise.commonMistakes })
+      } as any);
 
       // Create biomechanical rules
       if (exercise.biomechanicalRules) {

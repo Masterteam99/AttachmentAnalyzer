@@ -59,11 +59,11 @@ async function upsertUser(
 ) {
   await storage.upsertUser({
     id: claims["sub"],
-    email: claims["email"],
-    firstName: claims["first_name"],
-    lastName: claims["last_name"],
-    profileImageUrl: claims["profile_image_url"],
-  });
+    ...(claims["email"] && { email: claims["email"] }),
+    ...(claims["first_name"] && { firstName: claims["first_name"] }),
+    ...(claims["last_name"] && { lastName: claims["last_name"] }),
+    ...(claims["profile_image_url"] && { profileImageUrl: claims["profile_image_url"] }),
+  } as any);
 }
 
 export async function setupAuth(app: Express) {

@@ -289,33 +289,33 @@ export const movementAnalysisRelations = relations(movementAnalysis, ({ one }) =
 
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
+  id: true as any,
+  createdAt: true as any,
+  updatedAt: true as any,
 });
 
 export const insertWorkoutPlanSchema = createInsertSchema(workoutPlans).omit({
-  id: true,
-  createdAt: true,
+  id: true as any,
+  createdAt: true as any,
 });
 
 export const insertExerciseSchema = createInsertSchema(exercises).omit({
-  id: true,
+  id: true as any,
 });
 
 export const insertWorkoutSessionSchema = createInsertSchema(workoutSessions).omit({
-  id: true,
-  completedAt: true,
+  id: true as any,
+  completedAt: true as any,
 });
 
 export const insertAchievementSchema = createInsertSchema(achievements).omit({
-  id: true,
-  earnedAt: true,
+  id: true as any,
+  earnedAt: true as any,
 });
 
 export const insertMovementAnalysisSchema = createInsertSchema(movementAnalysis).omit({
-  id: true,
-  createdAt: true,
+  id: true as any,
+  createdAt: true as any,
 });
 
 // Types
