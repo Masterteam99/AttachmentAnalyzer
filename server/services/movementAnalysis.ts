@@ -128,23 +128,23 @@ class MovementAnalysisService {
     feedback: string;
   }> {
     try {
-      // Estrai angoli biomeccanici dai keypoints
-      const biomechanicalAngles = biomechanicalRulesEngine.extractBiomechanicalAngles(keypoints);
-      
-      // Valida contro le regole
-      const validation = await biomechanicalRulesEngine.validateExercise(exerciseName, biomechanicalAngles);
+      // Utilizza il nuovo metodo che legge i trigger dal tuo foglio di calcolo
+      const biomechanicalResult = await biomechanicalRulesEngine.getBiomechanicalFeedback(exerciseName, keypoints);
       
       let feedback = "Esecuzione biomeccanicamente corretta.";
-      if (validation.violations.length > 0) {
-        const mainViolations = validation.violations
-          .slice(0, 2)
-          .map(v => v.feedback)
-          .join(" ");
-        feedback = mainViolations;
+      
+      if (biomechanicalResult.triggersFired.length > 0) {
+        // Crea feedback basato sui trigger attivati dal tuo foglio di calcolo
+        const criticalFeedback = biomechanicalResult.criticalErrors.slice(0, 2).join(" ");
+        const suggestions = biomechanicalResult.suggestions.slice(0, 1).join("");
+        
+        feedback = criticalFeedback ? 
+          `${criticalFeedback} ${suggestions}` : 
+          `Trigger rilevati: ${biomechanicalResult.triggersFired.join(", ")}. ${suggestions}`;
       }
       
       return {
-        score: validation.score,
+        score: biomechanicalResult.biomechanicalScore,
         feedback
       };
     } catch (error) {

@@ -1,0 +1,252 @@
+[
+  {
+    "esercizio": "squat",
+    "articolazione": "knee_angle",
+    "condizione": ">",
+    "limite": "160",
+    "errore": "knee_alignment",
+    "descrizione_errore": "Ginocchia non allineate con le punte dei piedi",
+    "suggerimento": "Mantieni le ginocchia allineate con le punte dei piedi durante tutto il movimento",
+    "severita": "high"
+  },
+  {
+    "esercizio": "squat",
+    "articolazione": "hip_angle",
+    "condizione": "<",
+    "limite": "90",
+    "errore": "incomplete_depth",
+    "descrizione_errore": "Discesa non sufficiente dello squat",
+    "suggerimento": "Scendi fino a portare i fianchi sotto il livello delle ginocchia",
+    "severita": "medium"
+  },
+  {
+    "esercizio": "squat",
+    "articolazione": "back_angle",
+    "condizione": ">",
+    "limite": "120",
+    "errore": "forward_lean",
+    "descrizione_errore": "Busto troppo inclinato in avanti",
+    "suggerimento": "Mantieni il busto più eretto durante la discesa",
+    "severita": "high"
+  },
+  {
+    "esercizio": "squat",
+    "articolazione": "ankle_angle",
+    "condizione": "<",
+    "limite": "70",
+    "errore": "heel_lift",
+    "descrizione_errore": "Talloni che si alzano da terra",
+    "suggerimento": "Mantieni i talloni ben piantati a terra durante tutto il movimento",
+    "severita": "critical"
+  },
+  {
+    "esercizio": "squat",
+    "articolazione": "knee_valgus",
+    "condizione": ">",
+    "limite": "10",
+    "errore": "knee_cave",
+    "descrizione_errore": "Ginocchia che cedono verso l'interno",
+    "suggerimento": "Spingi le ginocchia verso l'esterno durante la discesa",
+    "severita": "critical"
+  },
+  {
+    "esercizio": "push_up",
+    "articolazione": "elbow_angle",
+    "condizione": ">",
+    "limite": "150",
+    "errore": "incomplete_range",
+    "descrizione_errore": "Range di movimento incompleto",
+    "suggerimento": "Scendi fino a sfiorare il pavimento con il petto",
+    "severita": "medium"
+  },
+  {
+    "esercizio": "push_up",
+    "articolazione": "hip_alignment",
+    "condizione": ">",
+    "limite": "10",
+    "errore": "hip_sag",
+    "descrizione_errore": "Fianchi che scendono perdendo la linea del corpo",
+    "suggerimento": "Mantieni una linea retta dalla testa ai talloni",
+    "severita": "high"
+  },
+  {
+    "esercizio": "push_up",
+    "articolazione": "shoulder_protraction",
+    "condizione": "<",
+    "limite": "5",
+    "errore": "shoulder_blade",
+    "descrizione_errore": "Scapole che si allargano eccessivamente",
+    "suggerimento": "Mantieni le scapole stabili e retratte",
+    "severita": "medium"
+  },
+  {
+    "esercizio": "push_up",
+    "articolazione": "neck_alignment",
+    "condizione": ">",
+    "limite": "15",
+    "errore": "neck_extension",
+    "descrizione_errore": "Collo iperesteso guardando in alto",
+    "suggerimento": "Mantieni il collo in posizione neutra guardando verso il basso",
+    "severita": "low"
+  },
+  {
+    "esercizio": "push_up",
+    "articolazione": "wrist_angle",
+    "condizione": "<",
+    "limite": "80",
+    "errore": "wrist_bend",
+    "descrizione_errore": "Polsi troppo piegati sotto carico",
+    "suggerimento": "Distribuisci il peso su tutta la mano non solo sui polsi",
+    "severita": "medium"
+  },
+  {
+    "esercizio": "lunges",
+    "articolazione": "front_knee_angle",
+    "condizione": "<",
+    "limite": "85",
+    "errore": "shallow_lunge",
+    "descrizione_errore": "Affondo non sufficientemente profondo",
+    "suggerimento": "Scendi fino a formare un angolo di 90 gradi con il ginocchio anteriore",
+    "severita": "medium"
+  },
+  {
+    "esercizio": "lunges",
+    "articolazione": "knee_tracking",
+    "condizione": ">",
+    "limite": "5",
+    "errore": "knee_valgus",
+    "descrizione_errore": "Ginocchio anteriore che cede verso l'interno",
+    "suggerimento": "Mantieni il ginocchio allineato con la punta del piede",
+    "severita": "high"
+  },
+  {
+    "esercizio": "lunges",
+    "articolazione": "back_knee_drop",
+    "condizione": "<",
+    "limite": "5",
+    "errore": "insufficient_depth",
+    "descrizione_errore": "Ginocchio posteriore non abbastanza vicino a terra",
+    "suggerimento": "Porta il ginocchio posteriore vicino al pavimento",
+    "severita": "low"
+  },
+  {
+    "esercizio": "lunges",
+    "articolazione": "torso_lean",
+    "condizione": ">",
+    "limite": "20",
+    "errore": "forward_lean",
+    "descrizione_errore": "Busto troppo inclinato in avanti",
+    "suggerimento": "Mantieni il busto eretto durante tutto il movimento",
+    "severita": "medium"
+  },
+  {
+    "esercizio": "lunges",
+    "articolazione": "weight_distribution",
+    "condizione": "<",
+    "limite": "60",
+    "errore": "heel_pressure",
+    "descrizione_errore": "Peso non correttamente distribuito sul tallone anteriore",
+    "suggerimento": "Distribuisci il peso principalmente sul tallone del piede anteriore",
+    "severita": "high"
+  },
+  {
+    "esercizio": "crunch",
+    "articolazione": "neck_strain",
+    "condizione": ">",
+    "limite": "15",
+    "errore": "neck_pull",
+    "descrizione_errore": "Collo tirato eccessivamente",
+    "suggerimento": "Non tirare il collo con le mani ma usa gli addominali",
+    "severita": "high"
+  },
+  {
+    "esercizio": "crunch",
+    "articolazione": "hip_flexor",
+    "condizione": ">",
+    "limite": "20",
+    "errore": "hip_compensation",
+    "descrizione_errore": "Uso eccessivo dei flessori dell'anca",
+    "suggerimento": "Concentrati sulla contrazione degli addominali superiori",
+    "severita": "medium"
+  },
+  {
+    "esercizio": "crunch",
+    "articolazione": "range_motion",
+    "condizione": "<",
+    "limite": "30",
+    "errore": "incomplete_crunch",
+    "descrizione_errore": "Contrazione addominale insufficiente",
+    "suggerimento": "Solleva le spalle da terra usando gli addominali",
+    "severita": "medium"
+  },
+  {
+    "esercizio": "crunch",
+    "articolazione": "lower_back",
+    "condizione": ">",
+    "limite": "5",
+    "errore": "back_arch",
+    "descrizione_errore": "Schiena che si inarca eccessivamente",
+    "suggerimento": "Mantieni la zona lombare a contatto con il pavimento",
+    "severita": "critical"
+  },
+  {
+    "esercizio": "crunch",
+    "articolazione": "breathing",
+    "condizione": "<",
+    "limite": "1",
+    "errore": "breath_hold",
+    "descrizione_errore": "Trattenimento del respiro durante l'esercizio",
+    "suggerimento": "Espira durante la contrazione e inspira durante la discesa",
+    "severita": "low"
+  },
+  {
+    "esercizio": "reverse_crunch",
+    "articolazione": "momentum",
+    "condizione": ">",
+    "limite": "15",
+    "errore": "swing_legs",
+    "descrizione_errore": "Uso eccessivo di slancio con le gambe",
+    "suggerimento": "Controlla il movimento usando solo gli addominali inferiori",
+    "severita": "high"
+  },
+  {
+    "esercizio": "reverse_crunch",
+    "articolazione": "neck_position",
+    "condizione": ">",
+    "limite": "10",
+    "errore": "neck_strain",
+    "descrizione_errore": "Collo sotto tensione eccessiva",
+    "suggerimento": "Mantieni il collo rilassato e neutro",
+    "severita": "medium"
+  },
+  {
+    "esercizio": "reverse_crunch",
+    "articolazione": "hip_angle",
+    "condizione": "<",
+    "limite": "45",
+    "errore": "insufficient_lift",
+    "descrizione_errore": "Sollevamento insufficiente dei fianchi",
+    "suggerimento": "Solleva i fianchi da terra contraendo gli addominali",
+    "severita": "medium"
+  },
+  {
+    "esercizio": "reverse_crunch",
+    "articolazione": "leg_extension",
+    "condizione": ">",
+    "limite": "20",
+    "errore": "leg_swing",
+    "descrizione_errore": "Gambe che si estendono troppo",
+    "suggerimento": "Mantieni le ginocchia piegate durante tutto il movimento",
+    "severita": "low"
+  },
+  {
+    "esercizio": "reverse_crunch",
+    "articolazione": "control",
+    "condizione": "<",
+    "limite": "2",
+    "errore": "speed_execution",
+    "descrizione_errore": "Esecuzione troppo veloce senza controllo",
+    "suggerimento": "Esegui il movimento lentamente e controllato",
+    "severita": "high"
+  }
+]

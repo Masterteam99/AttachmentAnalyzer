@@ -1,0 +1,16 @@
+esercizio,articolazione,condizione,limite,errore,descrizioneErrore,suggerimento,severita
+squat,knee_valgus,>,15,knee_cave,Ginocchia che cedono verso l'interno,Spingi le ginocchia verso l'esterno,critical
+squat,back_angle,>,30,forward_lean,Busto troppo inclinato in avanti,Mantieni il petto alto e la schiena dritta,high
+squat,knee_angle,<,90,shallow_squat,Accosciata troppo poco profonda,Scendi fino a portare le cosce parallele al suolo,medium
+push_up,hip_alignment,>,12,hip_sag,Fianchi che scendono,Mantieni una linea retta dalla testa ai talloni,critical
+push_up,elbow_angle,>,160,incomplete_range,Range di movimento limitato,Scendi completamente fino al petto,medium
+push_up,shoulder_protraction,>,20,shoulder_forward,Spalle troppo in avanti,Mantieni le scapole retratte,medium
+lunges,knee_tracking,>,8,knee_deviation,Ginocchio anteriore non allineato,Tieni il ginocchio sulla punta del piede,high
+lunges,back_knee_drop,<,5,knee_high,Ginocchio posteriore troppo alto,Scendi fino a sfiorare il pavimento,medium
+lunges,torso_lean,>,15,forward_lean,Busto inclinato in avanti,Mantieni il torso eretto,medium
+crunch,neck_strain,>,25,neck_pull,Collo troppo teso,Non tirare il collo con le mani,critical
+crunch,range_motion,<,30,limited_range,Movimento troppo limitato,Solleva completamente le spalle,medium
+crunch,lower_back,>,10,back_arch,Schiena troppo arcuata,Mantieni la zona lombare a terra,high
+reverse_crunch,momentum,>,50,too_fast,Troppo slancio nel movimento,Movimento controllato e lento,high
+reverse_crunch,spine_flexion,>,45,excessive_flex,Flessione spinale eccessiva,Non curvare troppo la schiena,medium
+reverse_crunch,control,>,40,loss_control,Perdita di controllo,Mantieni il controllo in ogni fase,medium

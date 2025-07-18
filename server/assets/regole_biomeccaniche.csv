@@ -1,0 +1,26 @@
+esercizio,articolazione,condizione,limite,errore,descrizione_errore,suggerimento,severita
+squat,knee_angle,>,160,knee_alignment,Ginocchia non allineate con le punte dei piedi,Mantieni le ginocchia allineate con le punte dei piedi durante tutto il movimento,high
+squat,hip_angle,<,90,incomplete_depth,Discesa non sufficiente dello squat,Scendi fino a portare i fianchi sotto il livello delle ginocchia,medium
+squat,back_angle,>,120,forward_lean,Busto troppo inclinato in avanti,Mantieni il busto più eretto durante la discesa,high
+squat,ankle_angle,<,70,heel_lift,Talloni che si alzano da terra,Mantieni i talloni ben piantati a terra durante tutto il movimento,critical
+squat,knee_valgus,>,10,knee_cave,Ginocchia che cedono verso l'interno,Spingi le ginocchia verso l'esterno durante la discesa,critical
+push_up,elbow_angle,>,150,incomplete_range,Range di movimento incompleto,Scendi fino a sfiorare il pavimento con il petto,medium
+push_up,hip_alignment,>,10,hip_sag,Fianchi che scendono perdendo la linea del corpo,Mantieni una linea retta dalla testa ai talloni,high
+push_up,shoulder_protraction,<,5,shoulder_blade,Scapole che si allargano eccessivamente,Mantieni le scapole stabili e retratte,medium
+push_up,neck_alignment,>,15,neck_extension,Collo iperesteso guardando in alto,Mantieni il collo in posizione neutra guardando verso il basso,low
+push_up,wrist_angle,<,80,wrist_bend,Polsi troppo piegati sotto carico,Distribuisci il peso su tutta la mano non solo sui polsi,medium
+lunges,front_knee_angle,<,85,shallow_lunge,Affondo non sufficientemente profondo,Scendi fino a formare un angolo di 90 gradi con il ginocchio anteriore,medium
+lunges,knee_tracking,>,5,knee_valgus,Ginocchio anteriore che cede verso l'interno,Mantieni il ginocchio allineato con la punta del piede,high
+lunges,back_knee_drop,<,5,insufficient_depth,Ginocchio posteriore non abbastanza vicino a terra,Porta il ginocchio posteriore vicino al pavimento,low
+lunges,torso_lean,>,20,forward_lean,Busto troppo inclinato in avanti,Mantieni il busto eretto durante tutto il movimento,medium
+lunges,weight_distribution,<,60,heel_pressure,Peso non correttamente distribuito sul tallone anteriore,Distribuisci il peso principalmente sul tallone del piede anteriore,high
+crunch,neck_strain,>,15,neck_pull,Collo tirato eccessivamente,Non tirare il collo con le mani ma usa gli addominali,high
+crunch,hip_flexor,>,20,hip_compensation,Uso eccessivo dei flessori dell'anca,Concentrati sulla contrazione degli addominali superiori,medium
+crunch,range_motion,<,30,incomplete_crunch,Contrazione addominale insufficiente,Solleva le spalle da terra usando gli addominali,medium
+crunch,lower_back,>,5,back_arch,Schiena che si inarca eccessivamente,Mantieni la zona lombare a contatto con il pavimento,critical
+crunch,breathing,<,1,breath_hold,Trattenimento del respiro durante l'esercizio,Espira durante la contrazione e inspira durante la discesa,low
+reverse_crunch,momentum,>,15,swing_legs,Uso eccessivo di slancio con le gambe,Controlla il movimento usando solo gli addominali inferiori,high
+reverse_crunch,neck_position,>,10,neck_strain,Collo sotto tensione eccessiva,Mantieni il collo rilassato e neutro,medium
+reverse_crunch,hip_angle,<,45,insufficient_lift,Sollevamento insufficiente dei fianchi,Solleva i fianchi da terra contraendo gli addominali,medium
+reverse_crunch,leg_extension,>,20,leg_swing,Gambe che si estendono troppo,Mantieni le ginocchia piegate durante tutto il movimento,low
+reverse_crunch,control,<,2,speed_execution,Esecuzione troppo veloce senza controllo,Esegui il movimento lentamente e controllato,high
