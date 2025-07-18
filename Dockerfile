@@ -8,13 +8,21 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci --only=production
+RUN npm install
 
 # Copy source code
 COPY . .
 
-# Build the application
-RUN npm run build:safe
+# Build the client only
+RUN npm run build:client
+
+# Create a non-root user
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Change ownership
+RUN chown -R nextjs:nodejs /app
+USER nextjs
 
 # Expose port
 EXPOSE 5000
@@ -23,5 +31,5 @@ EXPOSE 5000
 ENV NODE_ENV=production
 ENV PORT=5000
 
-# Start the application
-CMD ["npm", "start"]
+# Start the application with tsx directly
+CMD ["npm", "run", "start:simple"]

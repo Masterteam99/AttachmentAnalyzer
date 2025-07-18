@@ -1,0 +1,26 @@
+app = "attachment-analyzer"
+primary_region = "ams"
+
+[http_service]
+  internal_port = 5000
+  force_https = true
+
+[[services]]
+  internal_port = 5000
+  protocol = "tcp"
+
+  [[services.ports]]
+    force_https = true
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+[env]
+  NODE_ENV = "production"
+  PORT = "5000"
+
+[build]
+  dockerfile = "Dockerfile"
